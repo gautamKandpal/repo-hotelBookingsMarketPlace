@@ -23,6 +23,8 @@ const connectDB = async () => {
   }
 };
 
+connectDB();
+
 //middleware
 app.use(cors());
 app.use(morgan("dev"));
