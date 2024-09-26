@@ -9,7 +9,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.table({ name, email, pasword });
+    console.table({ name, email, password });
     try {
       const res = await axios.post(`http://localhost:5000/api/register`, {
         name,
@@ -18,7 +18,7 @@ const Register = () => {
       });
       console.log("REGISTER USER ===> ", res);
     } catch (err) {
-      console.log(err);
+      console.log("Error in registration request:", err);
     }
   };
 

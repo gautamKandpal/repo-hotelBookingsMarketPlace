@@ -23,6 +23,7 @@ connectDB();
 //middleware
 app.use(cors());
 app.use(morgan("dev"));
+app.use(express.json());
 
 //route middleware
 fs.readdirSync("./routes").map((r) =>
