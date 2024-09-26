@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
       min: 6,
       max: 20,
     },
-    stripe_account_id: "",
+    stripe_account_id: {},
     stripe_seller: {},
     stripeSession: {},
   },

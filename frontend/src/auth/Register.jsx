@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import RegisterForm from "../components/RegisterForm";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const Register = ({ history }) => {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,14 +14,21 @@ const Register = () => {
     e.preventDefault();
     console.table({ name, email, password });
     try {
-      const res = await axios.post(`http://localhost:5000/api/register`, {
-        name,
-        email,
-        password,
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/register`,
+        {
+          name,
+          email,
+          password,
+        }
+      );
       console.log("REGISTER USER ===> ", res);
+      toast.success("Registered successfully ");
+      navigate("/login");
     } catch (err) {
       console.log("Error in registration request:", err);
+
+      if (err.response.status === 400) toast.error(err.response.data);
     }
   };
 
