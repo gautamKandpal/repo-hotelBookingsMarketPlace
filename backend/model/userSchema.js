@@ -47,4 +47,23 @@ userSchema.pre("save", function (next) {
   }
 });
 
+userSchema.methods.matchPassword = async function (enterPassword) {
+  //compare the enter password with the stored password(db)
+  try {
+    let checkPassword = await bcrypt.compare(enterPassword, this.password);
+    return checkPassword;
+  } catch (err) {
+    console.log("COMPARE PASSSWORD ERR ==>", err);
+  }
+};
+
+// userSchema.methods.comparePassword = function (password, next) {
+//   bcrypt.compare(password, this.password, function (err, match) {
+//     if (err) {
+//       console.log("COMPARE PASSWORD ERR", err);
+//       return next(err, false);
+//     }
+//   });
+// };
+
 module.exports = mongoose.model("User", userSchema);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import LoginForm from "../components/LoginForm";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -9,6 +10,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log({ email, password });
+    try {
+      let res = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
+        email,
+        password,
+      });
+      console.log("LOGIN USER ==> ", res);
+      if (res.data) {
+        console.log("SAVE USER RES IN REDUX AND LOCAL STORAGE");
+      }
+      toast.success("Login Suceesfully");
+    } catch (err) {
+      console.log(err);
+      if (err.response.status === 400) toast.error(err.resonse.data);
+    }
   };
 
   return (
