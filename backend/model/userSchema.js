@@ -47,7 +47,7 @@ userSchema.pre("save", function (next) {
   }
 });
 
-userSchema.methods.matchPassword = async function (enterPassword) {
+userSchema.methods.comparePassword = async function (enterPassword) {
   //compare the enter password with the stored password(db)
   try {
     let checkPassword = await bcrypt.compare(enterPassword, this.password);

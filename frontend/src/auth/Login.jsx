@@ -9,7 +9,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ email, password });
+    console.log("SEND LOGIN DATA ==>", { email, password });
     try {
       let res = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
         email,
@@ -17,12 +17,12 @@ const Login = () => {
       });
       console.log("LOGIN USER ==> ", res);
       if (res.data) {
-        console.log("SAVE USER RES IN REDUX AND LOCAL STORAGE");
+        console.log("SAVE USER RES IN REDUX AND LOCAL STORAGE", res.data);
       }
       toast.success("Login Suceesfully");
     } catch (err) {
       console.log(err);
-      if (err.response.status === 400) toast.error(err.resonse.data);
+      if (err.response.status === 400) toast.error(err.response.data);
     }
   };
 

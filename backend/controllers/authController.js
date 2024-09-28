@@ -1,4 +1,5 @@
 const User = require("../model/userSchema.js");
+const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   // console.log(req.body);
@@ -35,4 +36,39 @@ const register = async (req, res) => {
   }
 };
 
-module.exports = { register };
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    //check if user with the mail exist
+    let user = await User.findOne({ email });
+    console.log(user);
+    if (!user) res.status(400).send("User with the email not found");
+
+    // compare password
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      res.status(400).send("Wrong password");
+    }
+    console.log("GENERATE A TOKEN");
+    //Generate a token then send as response to client
+    let token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    });
+
+    res.json({
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    });
+  } catch (err) {
+    console.log("LOGIN ERROR", err);
+    res.status(400).send("Signin failed");
+  }
+};
+
+module.exports = { register, login };
