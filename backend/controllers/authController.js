@@ -42,7 +42,9 @@ const login = async (req, res) => {
     //check if user with the mail exist
     let user = await User.findOne({ email });
     console.log(user);
-    if (!user) res.status(400).send("User with the email not found");
+    if (!user) {
+      return res.status(400).send("User with the email not found");
+    }
 
     // compare password
     const isMatch = await user.comparePassword(password);

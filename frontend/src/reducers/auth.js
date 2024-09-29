@@ -1,14 +1,21 @@
-// 1. create user reducer function
-//   {type:"LOGGGED_IN_USER",payload:{name: "abc",role:"qaz"}}
-export const authReducer = (state = { name: "abc", role: "qaz" }, action) => {
+let userState;
+if (window.localStorage.getItem("auth")) {
+  userState = JSON.parse(window.localStorage.getItem("auth"));
+  console.log("this is from user state", userState);
+} else {
+  userState = null; //{}
+}
+
+export const authReducer = (state = userState, action) => {
   switch (action.type) {
     case "LOGGED_IN_USER":
       return {
         ...state,
-        ...action.payload, // Spread the payload to merge it correctly into the state
+        ...action.payload, // Ensure payload contains necessary fields like token
       };
     case "LOGOUT":
-      // return action.payload;
+      // Clear state on logout
+      //return { ...state, ...action.payload}
       return {};
 
     default:

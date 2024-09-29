@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import LoginForm from "../components/LoginForm";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,9 +22,17 @@ const Login = () => {
       });
       console.log("LOGIN USER ==> ", res);
       if (res.data) {
-        console.log("SAVE USER RES IN REDUX AND LOCAL STORAGE", res.data);
+        console.log("SAVE USER RES IN REDUX AND LOCAL STORAGE");
+        //save user and token to local storage
+        window.localStorage.setItem("auth", JSON.stringify(res.data));
+        //save user and token to redux
+        dispatch({
+          type: "LOGGED_IN_USER",
+          payload: res.data,
+        });
+        navigate("/");
       }
-      toast.success("Login Suceesfully");
+      toast.success("Login Successfully");
     } catch (err) {
       console.log(err);
       if (err.response.status === 400) toast.error(err.response.data);
