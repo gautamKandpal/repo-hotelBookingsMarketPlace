@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./components/PrivateRoutes";
 import DashboardSeller from "./user/DashboardSeller";
+import NewHotel from "./hotels/NewHotel";
 
 function App() {
   return (
@@ -32,6 +33,14 @@ function App() {
           element={
             <PrivateRoute>
               <DashboardSeller />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/hotels/new"
+          element={
+            <PrivateRoute>
+              <NewHotel />
             </PrivateRoute>
           }
         />

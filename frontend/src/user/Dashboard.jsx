@@ -1,6 +1,7 @@
 import React from "react";
 import DashboardNav from "../components/DashboardNav";
 import ConnectNav from "../components/ConnectNav";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   return (
@@ -14,7 +15,16 @@ function Dashboard() {
       </div>
 
       <div className="container-fluid">
-        <p>show all bookings and a buton to browse hotels </p>
+        <div className="row">
+          <div className="col-md-10">
+            <h2>Your Bookings</h2>
+          </div>
+          <div className="col-md-2">
+            <Link to="/" className="btn btn-primary">
+              Browse Hotels
+            </Link>
+          </div>
+        </div>
       </div>
     </>
   );

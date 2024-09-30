@@ -13,11 +13,20 @@ function ConnectNav() {
     <div className="d-flex justify-content-around">
       <Card>
         <Meta
-          avatar={user.name[0]}
+          avatar={<Avatar>{user.name[0]}</Avatar>}
           title={user.name}
           description={`Joined ${moment(user.createdAt).fromNow()}`}
         />
       </Card>
+      {auth &&
+        auth.user &&
+        auth.user.stripe_seller &&
+        auth.user.stripe_seller.charges_enabled && (
+          <>
+            <div>Pending balance</div>
+            <div>Payout settings</div>
+          </>
+        )}
     </div>
   );
 }
