@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const TopNav = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const TopNav = () => {
       payload: null,
     });
     window.localStorage.removeItem("auth");
+    toast.success("Logout Successfully");
     navigate("/login");
   };
 

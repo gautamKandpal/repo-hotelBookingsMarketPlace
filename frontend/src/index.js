@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
+// import "antd/dist/antd.css";
+import "antd/dist/reset.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-// import { configureStore, combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
