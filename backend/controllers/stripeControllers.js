@@ -37,4 +37,40 @@ const createConnectAccount = async (req, res) => {
   res.send(link);
 };
 
-module.exports = { createConnectAccount };
+const updateDelayDays = async (accountId) => {
+  const account = await stripe.accounts.update(accountId, {
+    settings: {
+      payouts: {
+        schedule: {
+          delay_days: 7,
+        },
+      },
+    },
+  });
+  return account;
+};
+
+const getAccountStatus = async (req, res) => {
+  // console.log("GET ACCOUNT STATUS");
+  const user = await User.findById(req.auth._id).exec();
+  // console.log(user);
+  const account = await stripe.accounts.retrieve(user.stripe_account_id);
+  // console.log("USER ACCOUNT RETRIEVE", account);
+
+  //update delay days
+  const updatedAccount = await updateDelayDays(account.id);
+
+  const updatedUser = await User.findByIdAndUpdate(
+    user._id,
+    {
+      stripe_seller: updatedAccount,
+    },
+    { new: true }
+  )
+    .select("-password")
+    .exec();
+  // console.log(updatedUser);
+  res.json(updatedUser);
+};
+
+module.exports = { createConnectAccount, getAccountStatus };

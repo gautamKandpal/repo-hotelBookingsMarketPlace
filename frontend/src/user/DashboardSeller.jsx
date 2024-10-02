@@ -15,7 +15,8 @@ function DashboardSeller() {
     setLoading(true);
     try {
       let res = await createConnectAccount(auth.token);
-      console.log(res);
+      console.log(res); //get login link
+      window.location.href = res.data;
     } catch (err) {
       console.log("FROM HANDLECLICK", err);
       toast.error("Stripe connect failed, Try again");

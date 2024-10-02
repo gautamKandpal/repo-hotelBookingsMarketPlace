@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./components/PrivateRoutes";
 import DashboardSeller from "./user/DashboardSeller";
 import NewHotel from "./hotels/NewHotel";
+import Stripecallback from "./stripe/Stripecallback";
 
 function App() {
   return (
@@ -41,6 +42,14 @@ function App() {
           element={
             <PrivateRoute>
               <NewHotel />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/stripe/callback"
+          element={
+            <PrivateRoute>
+              <Stripecallback />
             </PrivateRoute>
           }
         />
