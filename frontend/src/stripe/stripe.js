@@ -31,3 +31,32 @@ export const updateUserInLocalStorage = (user, next) => {
     next();
   }
 };
+
+export const getAccountBalance = async (token) =>
+  await axios.post(
+    `${process.env.REACT_APP_API_URL}/get-account-balance`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+export const currencyFormatter = (data) => {
+  return (data.amount / 100).toLocaleString(data.currency, {
+    style: "currency",
+    currency: data.currency,
+  });
+};
+
+export const payoutSetting = async (token) =>
+  await axios.post(
+    `${process.env.REACT_APP_API_URL}/payout-setting`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );

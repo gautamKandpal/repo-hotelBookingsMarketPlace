@@ -73,4 +73,39 @@ const getAccountStatus = async (req, res) => {
   res.json(updatedUser);
 };
 
-module.exports = { createConnectAccount, getAccountStatus };
+const getAccountBalance = async (req, res) => {
+  const user = await User.findById(req.auth._id);
+  try {
+    const balance = await stripe.balance.retrieve({
+      stripeAccount: user.stripe_account_id,
+    });
+    // console.log("BALANCE ==>", balance);
+    res.json(balance);
+  } catch (err) {
+    console.log("ERROR FROM GETACCOUNTBAL ==> ", err);
+  }
+};
+
+const payoutSetting = async (req, res) => {
+  try {
+    const user = await User.findById(req.auth._id);
+
+    const loginLink = await stripe.accounts.createLoginLink(
+      user.stripe_account_id,
+      {
+        redirect_url: process.env.STRIPE_SETTING_REDIRECT_URL,
+      }
+    );
+    // console.log("LOGIN LINK FOR PAYOUT SETTING", loginLink);
+    res.json(loginLink);
+  } catch (err) {
+    console.log("STRIPE PAYOUT SETTING ERR ==> ", err);
+  }
+};
+
+module.exports = {
+  createConnectAccount,
+  getAccountStatus,
+  getAccountBalance,
+  payoutSetting,
+};
