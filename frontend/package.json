@@ -4,12 +4,12 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
+    "@react-google-maps/api": "^2.19.3",
     "@reduxjs/toolkit": "^2.2.7",
     "@stripe/stripe-js": "^4.5.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "algolia-places-react": "^1.6.1",
     "antd": "^5.21.1",
     "axios": "^1.7.7",
     "moment": "^2.30.1",
