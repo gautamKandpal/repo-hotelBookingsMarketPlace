@@ -22,7 +22,7 @@ const hotelsSchema = new mongoose.Schema(
       ref: "User",
     },
     image: {
-      type: Buffer,
+      data: Buffer,
       contentType: String,
     },
     from: {
@@ -40,4 +40,4 @@ const hotelsSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model(Hotel, hotelsSchema);
+module.exports = mongoose.model("Hotel", hotelsSchema);
