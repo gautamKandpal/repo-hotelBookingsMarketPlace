@@ -43,8 +43,24 @@ export const getAccountBalance = async (token) =>
     }
   );
 
+// export const currencyFormatter = (data) => {
+//   return data.amount.toLocaleString(data.currency, {
+//     style: "currency",
+//     currency: data.currency,
+//   });
+// };
+
 export const currencyFormatter = (data) => {
-  return (data.amount / 100).toLocaleString(data.currency, {
+  if (
+    !data ||
+    data.amount === null ||
+    data.amount === undefined ||
+    !data.currency
+  ) {
+    return "N/A"; // Return a default value or handle the case as needed
+  }
+
+  return data.amount.toLocaleString("en-US", {
     style: "currency",
     currency: data.currency,
   });

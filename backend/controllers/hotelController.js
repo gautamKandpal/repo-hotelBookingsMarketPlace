@@ -25,4 +25,21 @@ const create = async (req, res) => {
   }
 };
 
-module.exports = { create };
+const image = async (req, res) => {
+  let hotel = await Hotel.findById(req.params.hotelId);
+  if (hotel && hotel.image.data !== null) {
+    res.set("Content-Type", hotel.image.contentType);
+    return res.send(hotel.image.data);
+  }
+};
+
+const getHotels = async (req, res) => {
+  let all = await Hotel.find({})
+    .limit(24)
+    .select("-image.data")
+    .populate("postedBy", "_id name");
+  console.log(all);
+  res.json(all);
+};
+
+module.exports = { create, image, getHotels };
