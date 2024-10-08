@@ -18,7 +18,7 @@ const create = async (req, res) => {
 
     const result = await hotel.save();
     res.json(result);
-    console.log(result);
+    // console.log(result);
   } catch (err) {
     console.log(err);
     res.status(400).json({

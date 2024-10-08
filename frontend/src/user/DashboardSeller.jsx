@@ -7,6 +7,7 @@ import { HomeOutlined } from "@ant-design/icons";
 import { createConnectAccount } from "../stripe/stripe";
 import { sellerHotels } from "../actions/hotel";
 import { toast } from "react-toastify";
+import SmallCard from "../components/cards/SmallCard";
 
 function DashboardSeller() {
   const { auth } = useSelector((state) => ({ ...state }));
@@ -18,9 +19,8 @@ function DashboardSeller() {
   }, []);
 
   const loadSellerHotels = async () => {
-    let res = await sellerHotels(auth.token);
-    // setHotels(res.data);
-    console.log(res);
+    let { data } = await sellerHotels(auth.token);
+    setHotels(data);
   };
 
   const handleClick = async () => {
@@ -51,16 +51,16 @@ function DashboardSeller() {
         </div>
 
         <div className="row">
-          {JSON.stringify(hotels)}
-          {/* {hotels.map((h) => (
-          <SmallCard
-            key={h._id}
-            h={h}
-            showViewMoreButton={false}
-            owner={true}
-            handleHotelDelete={handleHotelDelete}
-          />
-        ))} */}
+          {/* {JSON.stringify(hotels)} */}
+          {hotels.map((h) => (
+            <SmallCard
+              key={h._id}
+              h={h}
+              showViewMoreButton={false}
+              owner={true}
+              // handleHotelDelete={handleHotelDelete}
+            />
+          ))}
         </div>
       </div>
     );
