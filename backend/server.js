@@ -30,7 +30,7 @@ fs.readdirSync("./routes").map((r) =>
   app.use("/api", require(`./routes/${r}`))
 );
 // app.use("/api", router);
-const port = process.env.PORT || 8000;
+const port = process.env.PORT;
 
 app.listen(port, () => {
   console.log(`Server is running on port:${port}`);

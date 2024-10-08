@@ -48,8 +48,14 @@ const sellerHotels = async (req, res) => {
   let all = await Hotel.find({ postedBy: req.auth._id })
     .select("-image.data")
     .populate("postedBy", "_id name");
-  console.log(all);
+  // console.log(all);
   res.send(all);
 };
 
-module.exports = { create, image, getHotels, sellerHotels };
+const deleteHotel = async (req, res) => {
+  let del = await Hotel.findByIdAndDelete(req.params.hotelId);
+  // res.json({ message: "deleted successfully", removed: del });
+  res.json(del);
+};
+
+module.exports = { create, image, getHotels, sellerHotels, deleteHotel };

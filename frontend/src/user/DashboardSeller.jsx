@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { HomeOutlined } from "@ant-design/icons";
 import { createConnectAccount } from "../stripe/stripe";
-import { sellerHotels } from "../actions/hotel";
+import { sellerHotels, deleteHotel } from "../actions/hotel";
 import { toast } from "react-toastify";
 import SmallCard from "../components/cards/SmallCard";
 
@@ -36,6 +36,15 @@ function DashboardSeller() {
     }
   };
 
+  const handleHotelDelete = async (hotelId) => {
+    if (!window.confirm("Are you sure?")) return;
+
+    deleteHotel(auth.token, hotelId).then((res) => {
+      toast.success("Hotel Deleted");
+      loadSellerHotels();
+    });
+  };
+
   const connected = () => {
     return (
       <div className="container-fluid">
@@ -58,7 +67,7 @@ function DashboardSeller() {
               h={h}
               showViewMoreButton={false}
               owner={true}
-              // handleHotelDelete={handleHotelDelete}
+              handleHotelDelete={handleHotelDelete}
             />
           ))}
         </div>
