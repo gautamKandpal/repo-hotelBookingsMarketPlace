@@ -5,11 +5,13 @@ const {
   create,
   image,
   getHotels,
+  sellerHotels,
 } = require("../controllers/hotelController.js");
 
 const router = express.Router();
 
 router.get("/hotels", getHotels);
+router.get("/seller-hotels", requireSignin, sellerHotels);
 router.get("/hotel/image/:hotelId", image);
 router.post("/create-hotel", requireSignin, formidable(), create);
 

@@ -4,10 +4,12 @@ const fs = require("fs");
 const create = async (req, res) => {
   //   console.log("RES Fields", req.fields);
   //   console.log("RES files", req.files);
+  // console.log(res);
   try {
     let fields = req.fields;
     let files = req.files;
     let hotel = new Hotel(fields);
+    hotel.postedBy = req.auth._id;
     //handle image
     if (files.image) {
       hotel.image.data = fs.readFileSync(files.image.path);
@@ -42,4 +44,12 @@ const getHotels = async (req, res) => {
   res.json(all);
 };
 
-module.exports = { create, image, getHotels };
+const sellerHotels = async (req, res) => {
+  let all = await Hotel.find({ postedBy: req.auth._id })
+    .select("-image.data")
+    .populate("postedBy", "_id name");
+  console.log(all);
+  res.send(all);
+};
+
+module.exports = { create, image, getHotels, sellerHotels };

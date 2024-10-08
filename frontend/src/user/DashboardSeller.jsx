@@ -1,15 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashboardNav from "../components/DashboardNav";
 import ConnectNav from "../components/ConnectNav";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { HomeOutlined } from "@ant-design/icons";
 import { createConnectAccount } from "../stripe/stripe";
+import { sellerHotels } from "../actions/hotel";
 import { toast } from "react-toastify";
 
 function DashboardSeller() {
   const { auth } = useSelector((state) => ({ ...state }));
   const [loading, setLoading] = useState(false);
+  const [hotels, setHotels] = useState([]);
+
+  useEffect(() => {
+    loadSellerHotels();
+  }, []);
+
+  const loadSellerHotels = async () => {
+    let res = await sellerHotels(auth.token);
+    // setHotels(res.data);
+    console.log(res);
+  };
 
   const handleClick = async () => {
     setLoading(true);
@@ -36,6 +48,19 @@ function DashboardSeller() {
               + Add New
             </Link>
           </div>
+        </div>
+
+        <div className="row">
+          {JSON.stringify(hotels)}
+          {/* {hotels.map((h) => (
+          <SmallCard
+            key={h._id}
+            h={h}
+            showViewMoreButton={false}
+            owner={true}
+            handleHotelDelete={handleHotelDelete}
+          />
+        ))} */}
         </div>
       </div>
     );
