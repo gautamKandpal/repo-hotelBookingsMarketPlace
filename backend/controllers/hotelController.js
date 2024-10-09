@@ -40,7 +40,7 @@ const getHotels = async (req, res) => {
     .limit(24)
     .select("-image.data")
     .populate("postedBy", "_id name");
-  console.log(all);
+  // console.log(all);
   res.json(all);
 };
 
@@ -58,4 +58,10 @@ const deleteHotel = async (req, res) => {
   res.json(del);
 };
 
-module.exports = { create, image, getHotels, sellerHotels, deleteHotel };
+const read = async (req, res) => {
+  let hotel = await Hotel.findById(req.params.hotelId).select("-image.data");
+  console.log(hotel);
+  res.json(hotel);
+};
+
+module.exports = { create, image, getHotels, sellerHotels, deleteHotel, read };

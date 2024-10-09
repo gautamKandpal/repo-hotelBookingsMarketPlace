@@ -36,3 +36,18 @@ export const deleteHotel = async (token, hotelId) => {
     }
   );
 };
+
+export const read = async (hotelId) => {
+  return await axios.get(`${process.env.REACT_APP_API_URL}/hotel/${hotelId}`);
+};
+
+export const updateHotel = async (token, data, hotelId) =>
+  await axios.put(
+    `${process.env.REACT_APP_API_URL}/update-hotel/${hotelId}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
