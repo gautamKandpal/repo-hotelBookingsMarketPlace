@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { DatePicker, Select } from "antd";
+// import { DatePicker, Select } from "antd";
 import { read, updateHotel } from "../actions/hotel";
 import { useSelector } from "react-redux";
 import HotelEditForm from "../components/forms/HotelEditForm";
 
-const { Option } = Select;
+// const { Option } = Select;
 
 const EditHotel = () => {
   const { hotelId } = useParams(); // Get the hotelId from the route params

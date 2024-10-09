@@ -2,46 +2,46 @@ const User = require("../model/userSchema.js");
 const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
-  // console.log(req.body);
+  const { name, email, password } = req.body;
+
   try {
-    //validation
+    // Validation
     if (!name) {
       return res.status(400).send("Name is required");
     }
     if (!password || password.length < 6) {
       return res
         .status(400)
-        .send("Password is required and it should have at least 6 character");
+        .send("Password is required and it should have at least 6 characters");
     }
     if (!email) {
       return res.status(400).send("Email is required");
     }
 
-    //checking email exist
-    // let userExist = await User.findOne({ email }).exec();
+    // Check if email already exists
     let userExist = await User.findOne({ email });
     if (userExist) {
-      return res.status(400).send("Email already exist");
+      return res.status(400).send("Email already exists");
     }
 
-    //register user
+    // Register user
     const user = new User(req.body);
     try {
       await user.save();
       console.log("USER CREATED ", user);
-      return res.json({ message: "User created succesfully" });
+      return res.json({ message: "User created successfully" });
     } catch (err) {
-      return res.status(400).send("CREATE USER FAILED ", err);
+      return res.status(400).send("CREATE USER FAILED");
     }
   } catch (err) {
     console.log(err);
+    return res.status(500).send("Server error");
   }
-  const { name, email, password } = req.body;
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
   try {
+    const { email, password } = req.body;
     //check if user with the mail exist
     let user = await User.findOne({ email });
     console.log(user);

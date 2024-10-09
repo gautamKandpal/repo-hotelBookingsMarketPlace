@@ -59,7 +59,9 @@ const deleteHotel = async (req, res) => {
 };
 
 const read = async (req, res) => {
-  let hotel = await Hotel.findById(req.params.hotelId).select("-image.data");
+  let hotel = await Hotel.findById(req.params.hotelId)
+    .populate("postedBy", "_id name")
+    .select("-image.data");
   console.log(hotel);
   res.json(hotel);
 };
@@ -81,7 +83,7 @@ const updateHotel = async (req, res) => {
     let updated = await Hotel.findByIdAndUpdate(req.params.hotelId, data, {
       new: true,
     }).select("-image.data");
-    console.log("############", updated);
+    // console.log("############", updated);
     res.json(updated);
   } catch (err) {
     console.log(err);
