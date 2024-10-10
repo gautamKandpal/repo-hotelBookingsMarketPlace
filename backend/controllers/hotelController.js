@@ -1,4 +1,7 @@
 const Hotel = require("../model/hotelsSchema");
+const User = require("../model/userSchema");
+const Stripe = require("stripe");
+const stripe = new Stripe(process.env.STRIPE_SECRET); // Initialize Stripe with your secret key
 const fs = require("fs");
 
 const create = async (req, res) => {
@@ -91,6 +94,47 @@ const updateHotel = async (req, res) => {
   }
 };
 
+const stripeSessionId = async (req, res) => {
+  try {
+    const { hotelId } = req.body;
+    const item = await Hotel.findById(hotelId).populate("postedBy");
+    const fee = (item.price * 20) / 100;
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      mode: "payment", // Specify mode, either 'payment' for one-time or 'subscription' for recurring
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: item.title,
+            },
+            unit_amount: item.price * 100, // Amount in cents (for USD)
+          },
+          quantity: 1,
+        },
+      ],
+      payment_intent_data: {
+        application_fee_amount: fee * 100,
+        transfer_data: {
+          destination: item.postedBy.stripe_account_id, // Destination account ID
+        },
+      },
+      success_url: process.env.STRIPE_SUCCESS_URL,
+      cancel_url: process.env.STRIPE_CANCEL_URL,
+    });
+    await User.findByIdAndUpdate(req.auth._id, { stripeSession: session });
+
+    console.log("SESSION =====>", session);
+
+    res.send({ sessionId: session.id });
+  } catch (error) {
+    console.error("Error creating Stripe session:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 module.exports = {
   create,
   image,
@@ -99,4 +143,5 @@ module.exports = {
   deleteHotel,
   read,
   updateHotel,
+  stripeSessionId,
 };

@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { read, diffDays } from "../actions/hotel";
 import { useNavigate, useParams } from "react-router-dom";
-// import { getSessionId } from "../actions/stripe";
+import { getSessionId } from "../stripe/stripe";
 import moment from "moment";
 import { useSelector } from "react-redux";
+import { loadStripe } from "@stripe/stripe-js";
 
 const ViewHotel = () => {
   const navigate = useNavigate();
   const { hotelId } = useParams(); // Get the hotelId from the route params
   const [hotel, setHotel] = useState({});
   const [image, setImage] = useState("");
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { auth } = useSelector((state) => ({ ...state }));
 
@@ -20,21 +21,23 @@ const ViewHotel = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    //   setLoading(true);
+    setLoading(true);
 
     if (!auth) navigate("/login");
-    console.log("get session id from stripe to show a button ");
-    //   try {
-    //     let res = await getSessionId(auth.token, hotelId); // Use hotelId from useParams
-    //     const stripe = await loadStripe(process.env.REACT_APP_STRIPE_KEY);
-    //     await stripe.redirectToCheckout({
-    //       sessionId: res.data.sessionId,
-    //     });
-    //   } catch (error) {
-    //     console.error("Error in Stripe checkout", error);
-    //   } finally {
-    //     setLoading(false);
-    //   }
+    console.log(auth.token, hotelId);
+    try {
+      let res = await getSessionId(auth.token, hotelId); // Use hotelId from useParams
+      // console.log("get sessionId response", res.data.sessionId);
+      const stripe = await loadStripe(process.env.REACT_APP_STRIPE_KEY);
+      await stripe.redirectToCheckout({
+        sessionId: res.data.sessionId,
+      });
+    } catch (error) {
+      console.error("Error in Stripe checkout", error);
+    }
+    //      finally {
+    //       setLoading(false);
+    //     }
   };
 
   const loadSellerHotel = async () => {
@@ -81,12 +84,13 @@ const ViewHotel = () => {
             <button
               onClick={handleClick}
               className="btn btn-block btn-lg btn-primary mt-3"
-              //   disabled={loading}
+              disabled={loading}
             >
-              {/* {loading
+              {loading
                 ? "Loading..."
-                :  */}
-              {auth && auth.token ? "Book Now" : "Login to Book"}
+                : auth && auth.token
+                ? "Book Now"
+                : "Login to Book"}
             </button>
           </div>
         </div>

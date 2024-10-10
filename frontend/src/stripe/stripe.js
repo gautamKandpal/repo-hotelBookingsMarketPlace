@@ -60,7 +60,7 @@ export const currencyFormatter = (data) => {
     return "N/A"; // Return a default value or handle the case as needed
   }
 
-  return data.amount.toLocaleString("en-US", {
+  return (data.amount / 100).toLocaleString("en-US", {
     style: "currency",
     currency: data.currency,
   });
@@ -70,6 +70,17 @@ export const payoutSetting = async (token) =>
   await axios.post(
     `${process.env.REACT_APP_API_URL}/payout-setting`,
     {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+export const getSessionId = async (token, hotelId) =>
+  await axios.post(
+    `${process.env.REACT_APP_API_URL}/stripe-session-id`,
+    { hotelId },
     {
       headers: {
         Authorization: `Bearer ${token}`,
