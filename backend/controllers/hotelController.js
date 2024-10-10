@@ -5,8 +5,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET); // Initialize Stripe with 
 const fs = require("fs");
 
 const create = async (req, res) => {
-  //   console.log("RES Fields", req.fields);
-  //   console.log("RES files", req.files);
   // console.log(res);
   try {
     let fields = req.fields;
@@ -65,7 +63,7 @@ const read = async (req, res) => {
   let hotel = await Hotel.findById(req.params.hotelId)
     .populate("postedBy", "_id name")
     .select("-image.data");
-  console.log(hotel);
+  // console.log(hotel);
   res.json(hotel);
 };
 
@@ -98,6 +96,7 @@ const stripeSessionId = async (req, res) => {
   try {
     const { hotelId } = req.body;
     const item = await Hotel.findById(hotelId).populate("postedBy");
+    console.log(item);
     const fee = (item.price * 20) / 100;
 
     const session = await stripe.checkout.sessions.create({
@@ -121,12 +120,12 @@ const stripeSessionId = async (req, res) => {
           destination: item.postedBy.stripe_account_id, // Destination account ID
         },
       },
-      success_url: process.env.STRIPE_SUCCESS_URL,
+      success_url: `${process.env.STRIPE_SUCCESS_URL}/${item._id}`,
       cancel_url: process.env.STRIPE_CANCEL_URL,
     });
     await User.findByIdAndUpdate(req.auth._id, { stripeSession: session });
 
-    console.log("SESSION =====>", session);
+    // console.log("SESSION =====>", session);
 
     res.send({ sessionId: session.id });
   } catch (error) {
