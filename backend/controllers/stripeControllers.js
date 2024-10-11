@@ -1,4 +1,5 @@
 const User = require("../model/userSchema");
+const Order = require("../model/orderSchema");
 const queryString = require("query-string");
 
 //stripe
@@ -103,9 +104,52 @@ const payoutSetting = async (req, res) => {
   }
 };
 
+const stripeSuccess = async (req, res) => {
+  try {
+    const { hotelId } = req.body;
+    const user = await User.findById(req.auth._id);
+    // check if userhas stripe session
+    if (!user.stripeSession) return;
+    // console.log("User ----> ", user);
+    //retrieve stripe session based on session_id
+    const session = await stripe.checkout.sessions.retrieve(
+      user.stripeSession.id
+    );
+    // console.log("session ---->", session);
+    if (session.payment_status === "paid") {
+      //check if order with that session id already exist by querying orders collection
+      const orderExist = await Order.findOne({ "session.id": session.id });
+      if (orderExist) {
+        res.json({
+          success: true,
+        });
+      } else {
+        //create new order and send success: true
+        let newOrder = await new Order({
+          hotel: hotelId,
+          session,
+          orderedBy: user._id, //auth._id
+        }).save();
+        //remove user's stripeSession
+        // console.log("from new Order", newOrder);
+        await User.findByIdAndUpdate(user._id, {
+          $set: {
+            stripeSession: {},
+          },
+        });
+
+        res.json({ success: true });
+      }
+    }
+  } catch (err) {
+    console.log("Stripe success error: ", err);
+  }
+};
+
 module.exports = {
   createConnectAccount,
   getAccountStatus,
   getAccountBalance,
   payoutSetting,
+  stripeSuccess,
 };
