@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DashboardNav from "../components/DashboardNav";
 import ConnectNav from "../components/ConnectNav";
 import { Link } from "react-router-dom";
+import { userHotelBookings } from "../actions/hotel";
+import { useSelector } from "react-redux";
+import BookingCard from "../components/cards/BookingCard";
 
 function Dashboard() {
+  const [booking, setBookings] = useState([]);
+  const {
+    auth: { token },
+  } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    loadUserBookings();
+  }, []);
+
+  const loadUserBookings = async () => {
+    const res = await userHotelBookings(token);
+    console.log("from dashboard loadUserBookings", res);
+    setBookings(res.data);
+  };
+
   return (
     <>
       <div className="container-fluid bg-secondary p-5">
@@ -25,6 +43,17 @@ function Dashboard() {
             </Link>
           </div>
         </div>
+      </div>
+
+      <div className="row">
+        {booking.map((b) => (
+          <BookingCard
+            key={b._id}
+            hotel={b.hotel}
+            session={b.session}
+            orderedBy={b.orderedBy}
+          />
+        ))}
       </div>
     </>
   );

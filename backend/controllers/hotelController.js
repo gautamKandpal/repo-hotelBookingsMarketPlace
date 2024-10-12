@@ -1,5 +1,6 @@
 const Hotel = require("../model/hotelsSchema");
 const User = require("../model/userSchema");
+const Order = require("../model/orderSchema");
 const Stripe = require("stripe");
 const stripe = new Stripe(process.env.STRIPE_SECRET); // Initialize Stripe with your secret key
 const fs = require("fs");
@@ -37,6 +38,7 @@ const image = async (req, res) => {
 };
 
 const getHotels = async (req, res) => {
+  // let all = await Hotel.find({ from: { $gte: new Date() } })
   let all = await Hotel.find({})
     .limit(24)
     .select("-image.data")
@@ -96,7 +98,7 @@ const stripeSessionId = async (req, res) => {
   try {
     const { hotelId } = req.body;
     const item = await Hotel.findById(hotelId).populate("postedBy");
-    console.log(item);
+    // console.log(item);
     const fee = (item.price * 20) / 100;
 
     const session = await stripe.checkout.sessions.create({
@@ -134,6 +136,31 @@ const stripeSessionId = async (req, res) => {
   }
 };
 
+const userHotelBookings = async (req, res) => {
+  const all = await Order.find({ orderedBy: req.auth._id })
+    .select("session")
+    .populate("hotel", "-image.data")
+    .populate("orderedBy", "_id name");
+  res.json(all);
+};
+
+const isAlreadyBooked = async (req, res) => {
+  const { hotelId } = req.params;
+  //find orders of currently logged in user
+  const userOrders = await Order.find({ orderedBy: req.auth._id }).select(
+    "hotel"
+  );
+  //check if hotelId is found in userOrders array
+  let ids = [];
+  for (let i = 0; i < userOrders.length; i++) {
+    ids.push(userOrders[i].hotel.toString());
+  }
+
+  res.json({
+    ok: ids.includes(hotelId),
+  });
+};
+
 module.exports = {
   create,
   image,
@@ -143,4 +170,6 @@ module.exports = {
   read,
   updateHotel,
   stripeSessionId,
+  userHotelBookings,
+  isAlreadyBooked,
 };

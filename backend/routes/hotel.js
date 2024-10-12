@@ -10,6 +10,8 @@ const {
   read,
   updateHotel,
   stripeSessionId,
+  userHotelBookings,
+  isAlreadyBooked,
 } = require("../controllers/hotelController.js");
 
 const router = express.Router();
@@ -28,5 +30,9 @@ router.put(
   updateHotel
 );
 router.delete("/delete-hotel/:hotelId", requireSignin, hotelOwner, deleteHotel);
+
+//orders
+router.get("/user-hotel-bookings", requireSignin, userHotelBookings);
+router.get("/is-already-booked/:hotelId", requireSignin, isAlreadyBooked);
 
 module.exports = router;
