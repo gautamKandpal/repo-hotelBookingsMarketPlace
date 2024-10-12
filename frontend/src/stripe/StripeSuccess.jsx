@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { stripeSuccessRequest } from "../stripe/stripe";
@@ -11,7 +11,6 @@ const StripeCancel = () => {
   const { token } = auth;
 
   useEffect(() => {
-    // console.log("send this hotelid to backend to crate order", hotelId);
     stripeSuccessRequest(token, hotelId).then((res) => {
       if (res.data.success) {
         // console.log("stripe success response", res.data);

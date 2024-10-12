@@ -50,9 +50,6 @@ const ViewHotel = () => {
     } catch (error) {
       console.error("Error in Stripe checkout", error);
     }
-    //      finally {
-    //       setLoading(false);
-    //     }
   };
 
   const loadSellerHotel = async () => {
@@ -73,7 +70,7 @@ const ViewHotel = () => {
               src={image}
               alt={hotel.title}
               className="img img-fluid m-2 "
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: "50%", height: "50%" }}
             />
           </div>
           <div className="col-md-6">

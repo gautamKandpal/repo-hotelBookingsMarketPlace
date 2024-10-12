@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { currencyFormatter } from "../../stripe/stripe.js";
 import { diffDays } from "../../actions/hotel";
-// import { useNavigate } from "react-router-dom";
 import OrderModal from "../modals/OrderModal.jsx";
 
 const BookingCard = ({ hotel, session, orderedBy }) => {
   const [showModal, setShowModal] = useState(false);
-  //   const navigate = useNavigate();
   return (
     <>
       <div className="card mb-3">
@@ -17,7 +15,7 @@ const BookingCard = ({ hotel, session, orderedBy }) => {
                 src={`${process.env.REACT_APP_API_URL}/hotel/image/${hotel._id}`}
                 alt="hotel"
                 className="card-image img img-fluid"
-                style={{ width: "100%", height: "100%" }}
+                // style={{ width: "50%", height: "100%" }}
               />
             ) : (
               <img

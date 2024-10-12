@@ -20,7 +20,7 @@ const SmallCard = ({
                 src={`${process.env.REACT_APP_API_URL}/hotel/image/${h._id}`}
                 alt="hotel"
                 className="card-image img img-fluid"
-                style={{ width: "100%", height: "100%" }}
+                // style={{ width: "100%", height: "100%" }}
               />
             ) : (
               <img
@@ -41,7 +41,6 @@ const SmallCard = ({
                   })}
                 </span>
               </h3>
-              {/* <p className="alert alert-info">{h.location}</p> */}
               <p className="card-text">{`${h.content.substring(1, 200)}...`}</p>
               <p className="card-text">
                 <span className="float-right text-primary">

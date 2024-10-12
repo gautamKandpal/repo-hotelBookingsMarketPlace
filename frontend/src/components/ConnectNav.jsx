@@ -14,7 +14,6 @@ const { Meta } = Card;
 const { Ribbon } = Badge;
 
 function ConnectNav() {
-  // const auth  = useSelector((state) => state.auth)
   const [loading, setLoading] = useState(false);
   const [balance, setBalance] = useState(0);
   const { auth } = useSelector((state) => ({ ...state }));
@@ -55,7 +54,6 @@ function ConnectNav() {
         auth.user.stripe_seller &&
         auth.user.stripe_seller.charges_enabled && (
           <>
-            {/* <div>Pending balance</div> */}
             <Ribbon text="Available" color="grey">
               <Card className="bg-light pt-1">
                 {balance &&

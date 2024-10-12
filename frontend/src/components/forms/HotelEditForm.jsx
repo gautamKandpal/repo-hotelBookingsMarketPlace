@@ -1,4 +1,3 @@
-// import AlgoliaPlaces from "algolia-places-react";
 import { DatePicker, Select } from "antd";
 import moment from "moment";
 

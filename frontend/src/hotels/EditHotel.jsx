@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
-// import { DatePicker, Select } from "antd";
 import { read, updateHotel } from "../actions/hotel";
 import { useSelector } from "react-redux";
 import HotelEditForm from "../components/forms/HotelEditForm";
@@ -95,7 +94,7 @@ const EditHotel = () => {
               alt="preview_image"
               className="img img-fluid m-2"
             />
-            <pre>{JSON.stringify(values, null, 4)}</pre>
+            {/* <pre>{JSON.stringify(values, null, 4)}</pre> */}
           </div>
         </div>
       </div>
